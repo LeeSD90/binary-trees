@@ -57,6 +57,19 @@ class BinaryTree
 		return nil
 	end
 
+	def dfs_rec(value, current=@root)
+		if current.value == value then return current end
+
+		left = dfs_rec(value, current.l_child) unless current.l_child.nil?
+		if !left.nil? && left.value == value then return left end
+
+		right = dfs_rec(value, current.r_child) unless current.r_child.nil?
+		if !right.nil? && right.value == value then return right end
+
+		return nil
+	end
+		
+
 	def trace(current=@root)
 		puts "ROOT: " + current.value.to_s
 		puts "LEFT: " + (current.l_child.nil? ? "NIL" : current.l_child.value.to_s)
@@ -68,8 +81,13 @@ class BinaryTree
 
 end
 
-tree = BinaryTree.new(Array.new(100000){rand(1..10000000)})
+tree = BinaryTree.new(Array.new(100000){rand(1..100000)})
+test_var = nil
+until !test_var.nil?
+	test_var = tree.breadth_first_search(rand(1..100000))
+end
 
-puts "BFS: " + Benchmark.measure{tree.breadth_first_search(4535)}.to_s
-puts "DFS: " + Benchmark.measure{tree.depth_first_search(4535)}.to_s
-
+puts "\nTesting " + test_var.value.to_s
+puts "BFS:                " + Benchmark.measure{tree.breadth_first_search(test_var.value)}.to_s
+puts "DFS:                " + Benchmark.measure{tree.depth_first_search(test_var.value)}.to_s
+puts "DFS with recursion: " + Benchmark.measure{tree.dfs_rec(test_var.value)}.to_s
