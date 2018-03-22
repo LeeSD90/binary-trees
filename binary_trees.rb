@@ -34,6 +34,17 @@ class BinaryTree
 		end
 	end
 
+	def breadth_first_search(value)
+		queue = [@root]
+		while !queue.empty?
+			if queue[0].value == value then return queue[0] end
+			queue << queue[0].l_child unless queue[0].l_child.nil?
+			queue << queue[0].r_child unless queue[0].r_child.nil?
+			queue.shift
+		end
+		return nil
+	end
+
 	def trace(current=@root)
 		puts "ROOT: " + current.value.to_s
 		puts "LEFT: " + (current.l_child.nil? ? "NIL" : current.l_child.value.to_s)
@@ -47,3 +58,5 @@ end
 
 tree = BinaryTree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.trace
+
+puts tree.breadth_first_search(17)
