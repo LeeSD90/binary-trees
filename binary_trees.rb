@@ -1,4 +1,5 @@
 require './node.rb'
+require 'benchmark'
 
 class BinaryTree
 	attr_reader :root
@@ -45,6 +46,17 @@ class BinaryTree
 		return nil
 	end
 
+	def depth_first_search(value)
+		stack = [@root]
+		while !stack.empty?
+			top = stack.pop
+			if top.value == value then return top end
+			stack << top.l_child unless top.l_child.nil?
+			stack << top.r_child unless top.r_child.nil?
+		end
+		return nil
+	end
+
 	def trace(current=@root)
 		puts "ROOT: " + current.value.to_s
 		puts "LEFT: " + (current.l_child.nil? ? "NIL" : current.l_child.value.to_s)
@@ -56,7 +68,8 @@ class BinaryTree
 
 end
 
-tree = BinaryTree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-tree.trace
+tree = BinaryTree.new(Array.new(100000){rand(1..10000000)})
 
-puts tree.breadth_first_search(17)
+puts "BFS: " + Benchmark.measure{tree.breadth_first_search(4535)}.to_s
+puts "DFS: " + Benchmark.measure{tree.depth_first_search(4535)}.to_s
+
